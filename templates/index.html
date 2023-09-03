@@ -1,97 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JSON Display</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
 
-        .container {
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-        }
+      .container {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+      }
 
-        h1 {
-            color: #007BFF;
-            margin-bottom: 20px;
-        }
+      h1 {
+        color: #007bff;
+        margin-bottom: 20px;
+      }
 
-        form {
-            display: flex;
-            flex-direction: column;
-        }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
 
-        textarea {
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            resize: vertical;
-            min-height: 150px;
-        }
+      textarea {
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        resize: vertical;
+        min-height: 150px;
+      }
 
-        input[type="submit"] {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
+      input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
 
-        hr {
-            border: none;
-            border-top: 1px solid #ccc;
-            margin: 20px 0;
-        }
+      hr {
+        border: none;
+        border-top: 1px solid #ccc;
+        margin: 20px 0;
+      }
 
-        h2 {
-            margin-bottom: 10px;
-        }
+      h2 {
+        margin-bottom: 10px;
+      }
 
-        pre {
-            white-space: pre-wrap;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            font-size: 14px;
-            margin-top: 10px;
-        }
+      pre {
+        white-space: pre-wrap;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 14px;
+        margin-top: 10px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>JSON Data Display</h1>
-        <form method="POST">
-            <textarea name="json_data" rows="5" placeholder="Enter JSON data"></textarea>
-            <input type="submit" value="Submit">
-        </form>
+      <h1>JSON Data Display</h1>
+      <form id="jsonForm">
+        <textarea
+          name="json_data"
+          rows="5"
+          placeholder="Enter JSON data"
+        ></textarea>
+        <input type="submit" value="Submit" />
+      </form>
 
-        <hr>
+      <hr />
 
-        <h2>Submitted JSON Data:</h2>
-        <div>
-            <pre>
-                {{ submitted_json|safe }}
-            </pre>
-        </div>
+      <h2>Submitted JSON Data:</h2>
+      <div id="responseContainer">
+        <!-- Response will be displayed here -->
+      </div>
     </div>
-</body>
+
+    <script>
+        const jsonForm = document.getElementById('jsonForm');
+        const responseContainer = document.getElementById('responseContainer');
+    
+        jsonForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+    
+            const jsonInput = jsonForm.elements['json_data'].value;
+    
+            fetch('/submit-json', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ json_data: jsonInput }),
+            })
+            .then(response => response.json()) 
+            .then(data => {
+              console.log(data.data)
+                //responseContainer.innerHTML 
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                responseContainer.innerHTML = 'An error occurred while submitting the JSON data.';
+            });
+        });
+    </script>
+  </body>
 </html>
