@@ -74,6 +74,18 @@
         font-size: 14px;
         margin-top: 10px;
       }
+
+      #responseContainer > div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #responseContainer > div > span {
+        border: 3px solid blue;
+        margin: 5%;
+        padding: 10px;
+      }
     </style>
   </head>
   <body>
@@ -91,37 +103,39 @@
       <hr />
 
       <h2>Submitted JSON Data:</h2>
-      <div id="responseContainer">
-        <!-- Response will be displayed here -->
-      </div>
+      <div id="responseContainer"></div>
     </div>
 
     <script>
-        const jsonForm = document.getElementById('jsonForm');
-        const responseContainer = document.getElementById('responseContainer');
-    
-        jsonForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-    
-            const jsonInput = jsonForm.elements['json_data'].value;
-    
-            fetch('/submit-json', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ json_data: jsonInput }),
-            })
-            .then(response => response.json()) 
-            .then(data => {
-              console.log(data.data)
-                //responseContainer.innerHTML 
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                responseContainer.innerHTML = 'An error occurred while submitting the JSON data.';
-            });
-        });
+      const jsonForm = document.getElementById("jsonForm");
+      const responseContainer = document.getElementById("responseContainer");
+
+      jsonForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const jsonInput = jsonForm.elements["json_data"].value;
+
+        fetch("/submit-json", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ json_data: jsonInput }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            let obj = data.data;
+
+            for (let key in obj) {
+              responseContainer.innerHTML = `<div><p>${key}</p><span>${obj[key]}</span></div>`;
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            responseContainer.innerHTML =
+              "An error occurred while submitting the JSON data.";
+          });
+      });
     </script>
   </body>
 </html>

@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template
-
+import json
 app = Flask(__name__)
 
 @app.route('/')
@@ -11,7 +11,8 @@ def submit_json():
     try:
         data = request.get_json()
         submitted_json = data.get('json_data', '')
-        return jsonify({'message': 'JSON submitted successfully', 'data': submitted_json})
+        jsondata = json.loads(submitted_json)
+        return jsonify({'message': 'JSON submitted successfully', 'data': jsondata})
     except Exception as e:
         print(e)
         return jsonify({'error': 'Invalid JSON data'}), 400
